@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Data Analyst · Portfolio</title>
+  <meta name="description" content="Portfolio of a Data Analyst: projects, resume, and contact." />
+  <style>
+    :root {
+      --bg: #0b0f14;
+      --panel: #10161f;
+      --text: #e9eef5;
+      --muted: #a8b2c1;
+      --accent: #5cc8ff;
+      --accent-2: #9fffcb;
+      --card: #0f141c;
+      --card-border: #1c2532;
+      --shadow: 0 10px 25px rgba(0,0,0,.35);
+      --radius: 18px;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text); font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji"; }
+
+    /* Header */
+    header {
+      position: sticky; top: 0; z-index: 50; backdrop-filter: saturate(140%) blur(8px);
+      background: linear-gradient(180deg, rgba(11,15,20,.95), rgba(11,15,20,.65) 60%, rgba(11,15,20,0));
+      border-bottom: 1px solid rgba(255,255,255,.06);
+    }
+    .wrap { max-width: 1100px; margin: 0 auto; padding: 18px 18px; }
+    .topbar { display: flex; align-items: center; gap: 14px; }
+    .avatar { width: 44px; height: 44px; border-radius: 50%; border: 2px solid var(--card-border); background: url('https://avatars.githubusercontent.com/u/583231?v=4') center/cover no-repeat; }
+    .brand { font-weight: 700; letter-spacing: .2px; }
+    nav { margin-left: auto; display: flex; gap: 10px; }
+    nav button, nav a.link {
+      appearance: none; border: 1px solid var(--card-border); background: var(--panel);
+      color: var(--text); padding: 8px 12px; border-radius: 999px; cursor: pointer; font-weight: 600;
+    }
+    nav button:is(:hover,:focus-visible), nav a.link:is(:hover,:focus-visible) { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(92,200,255,.12); }
+    nav button.active { border-color: var(--accent); color: var(--accent); }
+
+    /* Hero */
+    .hero { display: grid; grid-template-columns: 1.2fr .8fr; gap: 24px; align-items: center; padding: 40px 18px 10px; }
+    .hero-card { background: linear-gradient(180deg, #0f1622, #0c121a); border: 1px solid var(--card-border); border-radius: var(--radius); box-shadow: var(--shadow); padding: 28px; }
+    .kicker { color: var(--accent); font-weight: 700; letter-spacing: .5px; text-transform: uppercase; font-size: 12px; }
+    h1 { margin: 8px 0 10px; font-size: clamp(26px, 3.6vw, 40px); line-height: 1.1; }
+    .sub { color: var(--muted); max-width: 62ch; }
+    .badges { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+    .chip { padding: 6px 10px; background: #0b141e; border: 1px solid var(--card-border); border-radius: 999px; font-size: 12px; color: var(--muted); }
+
+    .contact-card { background: linear-gradient(180deg, #0f1622, #0c121a); border: 1px solid var(--card-border); border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px; display: grid; gap: 10px; }
+    .contact-card a { color: var(--accent); text-decoration: none; font-weight: 600; }
+
+    /* Projects */
+    section#projects { padding: 30px 18px 34px; }
+    h2 { font-size: clamp(22px, 2.6vw, 28px); margin: 0 0 12px; }
+    .grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 16px; }
+    .card { grid-column: span 12; background: var(--card); border: 1px solid var(--card-border); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); display: grid; grid-template-rows: 160px auto; transition: transform .2s; }
+    .card:hover { transform: translateY(-3px); }
+    .thumb { background: #0a1320; display: grid; place-items: center; position: relative; }
+    .thumb img { width: 100%; height: 100%; object-fit: cover; }
+    .card-body { padding: 14px; }
+    .card-title { font-weight: 700; margin: 0 0 6px; }
+    .card-desc { color: var(--muted); font-size: 14px; margin-bottom: 10px; }
+    .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+    .tag { font-size: 12px; padding: 4px 8px; border: 1px solid var(--card-border); border-radius: 999px; color: var(--muted); }
+    .open { margin-left: auto; font-size: 13px; color: var(--accent-2); font-weight: 700; text-decoration: none; }
+
+    /* Resume (tab content) */
+    .tabsheet { display: none; padding: 24px 18px 50px; }
+    .tabsheet.active { display: block; }
+    .timeline { display: grid; gap: 14px; }
+    .entry { background: var(--card); border: 1px solid var(--card-border); border-radius: var(--radius); padding: 16px; box-shadow: var(--shadow); }
+    .entry h3 { margin: 0 0 4px; font-size: 18px; }
+    .entry .when { color: var(--muted); font-size: 13px; margin-bottom: 6px; }
+    .entry ul { margin: 8px 0 0 16px; }
+
+    /* Footer */
+    footer { padding: 28px 18px 60px; color: var(--muted); text-align: center; }
+
+    /* Responsive */
+    @media (min-width: 680px) { .card { grid-column: span 6; } }
+    @media (min-width: 980px) { .card { grid-column: span 4; } }
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr; }
+      nav { flex-wrap: wrap; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap topbar">
+      <div class="avatar" aria-hidden="true"></div>
+      <div class="brand">Your Name · Data Analyst</div>
+      <nav>
+        <a class="link" href="#projects">Projects</a>
+        <button id="resumeTabBtn" type="button" aria-controls="resumeSheet">Resume</button>
+        <a class="link" href="mailto:you@example.com">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <!-- Intro / About -->
+    <section class="hero" aria-label="Introduction">
+      <div class="hero-card">
+        <div class="kicker">Hello! I'm a data analyst.</div>
+        <h1>I turn messy data into clear stories and decisions.</h1>
+        <p class="sub">I specialize in SQL, Python, and dashboarding (Tableau/Power BI). I love designing experiments, building reproducible pipelines, and shipping analyses that move the needle.</p>
+        <div class="badges">
+          <span class="chip">SQL</span>
+          <span class="chip">Python</span>
+          <span class="chip">Pandas</span>
+          <span class="chip">A/B Testing</span>
+          <span class="chip">Tableau</span>
+          <span class="chip">Power BI</span>
+        </div>
+      </div>
+
+      <aside class="contact-card">
+        <div><strong>Based in:</strong> Anywhere</div>
+        <div><strong>Email:</strong> <a href="mailto:you@example.com">you@example.com</a></div>
+        <div><strong>GitHub:</strong> <a href="https://github.com/yourhandle" target="_blank" rel="noopener noreferrer">@yourhandle</a></div>
+        <div><strong>LinkedIn:</strong> <a href="https://www.linkedin.com/in/yourhandle" target="_blank" rel="noopener noreferrer">/in/yourhandle</a></div>
+      </aside>
+    </section>
+
+    <!-- Projects Grid (scroll down to see) -->
+    <section id="projects" aria-label="Projects">
+      <h2>Selected Projects</h2>
+      <p class="sub" style="margin-bottom:12px">Click any card to open the GitHub repo in a new tab.</p>
+      <div id="projectGrid" class="grid" role="list"></div>
+    </section>
+  </main>
+
+  <!-- Resume Tab Sheet -->
+  <section id="resumeSheet" class="tabsheet" aria-label="Resume" aria-live="polite">
+    <div class="wrap">
+      <h2>Resume</h2>
+      <div id="timeline" class="timeline" role="list"></div>
+    </div>
+  </section>
+
+  <footer>
+    © <span id="year"></span> Your Name · Built with plain HTML/CSS/JS · Hosted on GitHub Pages
+  </footer>
+
+  <script>
+    // -----------------
+    // 1) CONFIGURE HERE
+    // -----------------
+    const PROJECTS = [
+      {
+        title: "Customer Churn Prediction",
+        desc: "End-to-end ML workflow: feature engineering, XGBoost, SHAP explanations, and a minimal FastAPI demo.",
+        tags: ["Python", "XGBoost", "SHAP"],
+        thumb: "assets/churn.png", // place image in /assets
+        repo: "https://github.com/yourhandle/churn-prediction"
+      },
+      {
+        title: "SQL Analytics Toolkit",
+        desc: "Reusable SQL templates for cohort analysis, retention curves, and funnel metrics across warehouses.",
+        tags: ["SQL", "dbt", "BigQuery"],
+        thumb: "assets/sql.png",
+        repo: "https://github.com/yourhandle/sql-analytics-toolkit"
+      },
+      {
+        title: "A/B Test Analyzer",
+        desc: "Power analysis, CUPED, sequential testing, and a clean dashboard to report experiment results.",
+        tags: ["Python", "Experimentation", "Dash"],
+        thumb: "assets/abtest.png",
+        repo: "https://github.com/yourhandle/ab-test-analyzer"
+      }
+    ];
+
+    // Resume entries shown in reverse chronological order
+    const RESUME = [
+      {
+        role: "Senior Data Analyst",
+        company: "Acme Corp",
+        when: "2023 – Present",
+        bullets: [
+          "Led analytics for growth squad; identified opportunity worth +$3.2M ARR.",
+          "Productionized dbt models and CI checks; reduced data freshness incidents by 40%.",
+          "Introduced experiment review doc template used across product lines."
+        ]
+      },
+      {
+        role: "Data Analyst",
+        company: "Beta Co.",
+        when: "2020 – 2023",
+        bullets: [
+          "Built self-serve Tableau dashboards used by 120+ monthly active stakeholders.",
+          "Designed retention metrics and segmentation to inform lifecycle marketing.",
+          "Owned weekly KPIs; automated reporting and alerts in Python."
+        ]
+      },
+      {
+        role: "Business Analyst",
+        company: "Gamma Inc.",
+        when: "2018 – 2020",
+        bullets: [
+          "Modeled pricing scenarios; supported annual planning and forecasting.",
+          "Ad-hoc deep dives into conversion and funnel drop-offs."
+        ]
+      },
+      {
+        role: "Education",
+        company: "B.S. in Statistics",
+        when: "2014 – 2018",
+        bullets: [
+          "University of Example · Coursework: Probability, Regression, Experimental Design, Databases"
+        ]
+      }
+    ];
+
+    // -----------------
+    // 2) RENDER LOGIC
+    // -----------------
+
+    // Projects grid renderer
+    const grid = document.getElementById('projectGrid');
+    const frag = document.createDocumentFragment();
+    PROJECTS.forEach((p, idx) => {
+      const card = document.createElement('article');
+      card.className = 'card';
+      card.setAttribute('role', 'listitem');
+
+      const thumb = document.createElement('div');
+      thumb.className = 'thumb';
+      if (p.thumb) {
+        const img = document.createElement('img');
+        img.src = p.thumb;
+        img.alt = `${p.title} thumbnail`;
+        thumb.appendChild(img);
+      } else {
+        thumb.innerHTML = `<svg width="100%" height="100%" viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg"><rect width="400" height="200" fill="#0c1726"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#5cc8ff" font-weight="700" font-family="ui-sans-serif, system-ui" font-size="20">${p.title}</text></svg>`;
+      }
+
+      const body = document.createElement('div');
+      body.className = 'card-body';
+      const h3 = document.createElement('h3');
+      h3.className = 'card-title';
+      h3.textContent = p.title;
+      const desc = document.createElement('p');
+      desc.className = 'card-desc';
+      desc.textContent = p.desc;
+
+      const meta = document.createElement('div');
+      meta.style.display = 'flex';
+      meta.style.alignItems = 'center';
+      meta.style.gap = '8px';
+      const tags = document.createElement('div');
+      tags.className = 'tags';
+      p.tags?.forEach(t => {
+        const s = document.createElement('span');
+        s.className = 'tag';
+        s.textContent = t;
+        tags.appendChild(s);
+      });
+      const open = document.createElement('a');
+      open.className = 'open';
+      open.href = p.repo; open.target = '_blank'; open.rel = 'noopener noreferrer';
+      open.textContent = 'Open Repo ↗';
+
+      meta.appendChild(tags);
+      meta.appendChild(open);
+
+      body.appendChild(h3);
+      body.appendChild(desc);
+      body.appendChild(meta);
+
+      card.appendChild(thumb);
+      card.appendChild(body);
+
+      // Make the whole card clickable
+      card.style.cursor = 'pointer';
+      card.addEventListener('click', (e) => {
+        // avoid double-opening if the explicit link was clicked
+        if (e.target.tagName.toLowerCase() === 'a') return;
+        window.open(p.repo, '_blank', 'noopener');
+      });
+
+      frag.appendChild(card);
+    });
+    grid.appendChild(frag);
+
+    // Resume renderer (reverse chronological assumed by data order)
+    const timeline = document.getElementById('timeline');
+    const tfrag = document.createDocumentFragment();
+    RESUME.forEach(item => {
+      const entry = document.createElement('article');
+      entry.className = 'entry';
+      entry.setAttribute('role', 'listitem');
+      entry.innerHTML = `<h3>${item.role} · ${item.company}</h3><div class="when">${item.when}</div>`;
+      if (item.bullets?.length) {
+        const ul = document.createElement('ul');
+        item.bullets.forEach(b => { const li = document.createElement('li'); li.textContent = b; ul.appendChild(li); });
+        entry.appendChild(ul);
+      }
+      tfrag.appendChild(entry);
+    });
+    timeline.appendChild(tfrag);
+
+    // Tabs: only the Resume lives in a tab sheet; default is hidden
+    const resumeBtn = document.getElementById('resumeTabBtn');
+    const resumeSheet = document.getElementById('resumeSheet');
+    const main = document.querySelector('main');
+    const buttons = [resumeBtn];
+
+    function setResumeVisible(vis) {
+      if (vis) {
+        resumeSheet.classList.add('active');
+        resumeBtn.classList.add('active');
+        main.style.display = 'none';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        resumeSheet.classList.remove('active');
+        resumeBtn.classList.remove('active');
+        main.style.display = '';
+      }
+    }
+
+    resumeBtn.addEventListener('click', () => {
+      const isActive = resumeSheet.classList.contains('active');
+      setResumeVisible(!isActive);
+    });
+
+    // Footer year
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
